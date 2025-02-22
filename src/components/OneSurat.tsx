@@ -4,20 +4,31 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Timeline, TimelineEntry } from "@/components/ui/timeline";
 import { OneSuratResponse } from "@/lib/quran-model";
 import { convertToArabicNumbers } from "@/lib/latinToArabic";
-import CustomDrawer from "../CustomDrawer";
-import { useSingleSuratStore, useTranslationIdStore } from "@/lib/stores/store";
+import { useQuranStore } from "@/lib/stores/store";
+// import Link from "next/link";
 
-const OneQuran = ({ id }: { id: string }) => {
+const OneSurat = ({ translation }: { translation: string }) => {
   const [surat, setSurat] = useState<OneSuratResponse>();
-  const { fetchSingleSurat, singleSurat, translationOpen } =
-    useSingleSuratStore();
-  const { translationId } = useTranslationIdStore();
+  const [error, setError] = useState(null);
+
+  const { suratListData, loading, fetchSuratListData } = useQuranStore();
 
   const fetchData = useCallback(() => {
-    if (!singleSurat) fetchSingleSurat(translationId as "id" | "ar" | "en", id);
-    setSurat(singleSurat);
-    return;
-  }, [id, fetchSingleSurat, singleSurat, translationId]);
+    fetchSuratListData();
+    fetch(`https://quran-api2.vercel.app/api/${translation}/surat/114`) // API contoh
+      .then((res) => {
+        if (!res.ok) throw new Error("Gagal fetch data");
+        return res.json();
+      })
+      .then((data) => {
+        const newData = data.data;
+        setSurat(newData);
+      })
+      .catch((err) => {
+        setError(err.message);
+        console.log(error);
+      });
+  }, [error, translation, fetchSuratList]);
 
   useEffect(() => {
     fetchData();
@@ -26,9 +37,9 @@ const OneQuran = ({ id }: { id: string }) => {
   const ayatData = surat?.verses.map((vers) => {
     return {
       title:
-        translationId === "id"
+        translation === "id"
           ? `Ayat ke ${vers.number}`
-          : translationId === "en"
+          : translation === "en"
           ? `Verse ${vers.number}`
           : `الآية ${convertToArabicNumbers(vers.number)}`,
       content: (
@@ -37,39 +48,19 @@ const OneQuran = ({ id }: { id: string }) => {
             {vers.text}
           </h3>
           <h4 className="text-neutral-800 dark:text-neutral-200 leading-10 text-2xl text-justify font-light font-sans mt-20 max-sm:mt-6 max-md:mt-0">
-            {translationId !== "ar" && translationOpen && (
+            {}
+            {translation !== "ar" && (
               <span className="font-bold italic text-3xl mr-1">&quot;</span>
             )}
-            {translationId === "id" && translationOpen
+            {translation === "id"
               ? vers.translation_id
-              : translationId === "en" && translationOpen
+              : translation === "en"
               ? vers.translation_en
               : null}
-            {translationId !== "ar" && translationOpen && (
+            {translation !== "ar" && (
               <span className="font-bold italic text-3xl mr-1">&quot;</span>
             )}
           </h4>
-          {translationId !== "ar" && (
-            <CustomDrawer
-              type="translation"
-              lang={translationId === "id" ? "id" : "en"}
-              title={`Q.S. ${surat.name}:${vers.number}`}
-              content={
-                translationId === "id"
-                  ? vers.translation_id
-                  : vers.translation_en
-              }
-            />
-          )}
-
-          {translationId === "id" && (
-            <CustomDrawer
-              type="tafsir"
-              lang={translationId === "id" ? "id" : "en"}
-              title={`Q.S. ${surat.name}:${vers.number}`}
-              content={surat?.tafsir.id.kemenag.text[vers.number]}
-            />
-          )}
         </div>
       ),
     };
@@ -78,15 +69,16 @@ const OneQuran = ({ id }: { id: string }) => {
   return (
     <div className="min-h-screen w-full">
       <div className="absolute top-0 left-0 w-full">
+        {loading ? <div>Loading SuratList...</div> : <div>Data fetched</div>}
         {surat !== undefined ? (
           <Timeline
             data={ayatData as TimelineEntry[]}
             customData={{
               title: surat.name,
               description:
-                translationId === "id"
+                translation === "id"
                   ? surat.name_translations.id
-                  : translationId === "en"
+                  : translation === "en"
                   ? surat.name_translations.en
                   : surat.name_translations.ar,
             }}
@@ -99,4 +91,4 @@ const OneQuran = ({ id }: { id: string }) => {
   );
 };
 
-export default OneQuran;
+export default OneSurat;

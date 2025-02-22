@@ -1,7 +1,8 @@
+import OneSurat from "@/components/OneSurat";
 import React from "react";
 
 const page = () => {
-  return <div>page</div>;
+  return <OneSurat translation="id" />;
 };
 
 export default page;

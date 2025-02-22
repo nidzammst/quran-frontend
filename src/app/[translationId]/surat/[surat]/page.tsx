@@ -17,11 +17,11 @@ const page = async ({
 }: {
   params: Promise<{ translationId: string; surat: string }>;
 }) => {
-  const { translationId, surat } = await params;
+  const { surat } = await params;
 
   return (
     <div className="text-white">
-      <OneQuran id={surat} translation={translationId} />
+      <OneQuran id={surat} />
     </div>
   );
 };

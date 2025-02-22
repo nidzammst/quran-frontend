@@ -20,48 +20,52 @@ import {
 } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
 
-export function SearchComboBox({ ayat }: { ayat: number[] }) {
+export function SuratComboBox() {
+  const surat: number[] = [];
+
+  for (let i = 1; i <= 114; i++) {
+    surat.push(i);
+  }
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
   const router = useRouter();
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className="max-w-[130px]">
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between fixed z-10"
+          className="w-[130px] justify-between"
         >
           {value
-            ? ayat.find((ayat) => ayat.toString() === value)
-            : "Select ayat..."}
+            ? `surat ${surat.find((surat) => surat.toString() === value)}`
+            : "Pilih surat..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[130px] p-0">
         <Command>
-          <CommandInput placeholder="Search ayat..." className="h-9" />
+          <CommandInput placeholder="Search surat..." className="h-9" />
           <CommandList>
-            <CommandEmpty>No ayat found.</CommandEmpty>
+            <CommandEmpty>No surat found.</CommandEmpty>
             <CommandGroup>
-              {ayat.map((ayat) => (
+              {surat.map((surat) => (
                 <CommandItem
-                  key={ayat.toString()}
-                  value={ayat.toString()}
+                  key={surat.toString()}
+                  value={surat.toString()}
                   onSelect={(currentValue) => {
-                    router.push(`#ayat-${ayat.toString()}`);
+                    router.push(`/id/surat/${surat.toString()}`);
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {ayat.toString()}
+                  surat {surat.toString()}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === ayat.toString() ? "opacity-100" : "opacity-0"
+                      value === surat.toString() ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

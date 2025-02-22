@@ -3,6 +3,7 @@
 import { HoverEffect } from "@/components/ui/card-hover-effect";
 import { convertToArabicNumbers } from "@/lib/latinToArabic";
 import { SuratResponse } from "@/lib/quran-model";
+import { useQuranStore } from "@/lib/stores/store";
 import React, { useCallback, useEffect, useState } from "react";
 
 export type HoverEffectType = {
@@ -13,32 +14,32 @@ export type HoverEffectType = {
 
 const QuranPage = ({ translationId }: { translationId: string }) => {
   const [suratList, setSuratList] = useState<HoverEffectType[]>();
-  const [error, setError] = useState(null);
-  console.log(translationId);
+
+  const { suratListData, fetchSuratListData } = useQuranStore();
 
   const fetchData = useCallback(() => {
-    fetch("https://quran-api2.vercel.app/api/list-surat") // API contoh
-      .then((res) => {
-        if (!res.ok) throw new Error("Gagal fetch data");
-        return res.json();
-      })
-      .then((data) => {
-        const newData = data.data.map((surat: SuratResponse) => {
-          return {
-            title: `${surat.number_of_surah}. ${surat.name} (${surat.number_of_ayah})`,
-            description: `${convertToArabicNumbers(surat.number_of_surah)}.  ${
-              surat.name_translations.ar
-            }`,
-            link: `/id/surat/${surat.number_of_surah}`,
-          };
-        });
-        setSuratList(newData);
-      })
-      .catch((err) => {
-        setError(err.message);
-        console.log(error);
-      });
-  }, [error]);
+    fetchSuratListData();
+    const newData = suratListData?.map((surat: SuratResponse) => {
+      return {
+        title: `${surat.number_of_surah}. ${surat.name} (${
+          translationId === "ar"
+            ? convertToArabicNumbers(surat.number_of_ayah)
+            : surat.number_of_ayah
+        }${
+          translationId === "id"
+            ? " Ayat"
+            : translationId === "en"
+            ? " Verses"
+            : " آية"
+        })`,
+        description: `${convertToArabicNumbers(surat.number_of_surah)}.  ${
+          surat.name_translations.ar
+        }`,
+        link: `/id/surat/${surat.number_of_surah}`,
+      };
+    });
+    setSuratList(newData);
+  }, [fetchSuratListData, suratListData, translationId]);
 
   useEffect(() => {
     fetchData();

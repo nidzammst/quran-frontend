@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/id",
+        permanent: true, // Set true untuk redirect permanen (301)
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
