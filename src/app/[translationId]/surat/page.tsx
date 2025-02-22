@@ -1,8 +1,7 @@
-import { TimelineDemo } from "@/components/ui/Demo";
 import React from "react";
 
 const page = () => {
-  return <TimelineDemo />;
+  return <div>page</div>;
 };
 
 export default page;
