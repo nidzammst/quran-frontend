@@ -11,11 +11,11 @@ const OneSurat = ({ translation }: { translation: string }) => {
   const [surat, setSurat] = useState<OneSuratResponse>();
   const [error, setError] = useState(null);
 
-  const { suratListData, loading, fetchSuratListData } = useQuranStore();
+  const { loading, fetchSuratListData } = useQuranStore();
 
   const fetchData = useCallback(() => {
     fetchSuratListData();
-    fetch(`https://quran-api2.vercel.app/api/${translation}/surat/114`) // API contoh
+    fetch(`https://quran-api2.vercel.app/api/${translation}/surat/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Gagal fetch data");
         return res.json();
@@ -28,7 +28,7 @@ const OneSurat = ({ translation }: { translation: string }) => {
         setError(err.message);
         console.log(error);
       });
-  }, [error, translation, fetchSuratList]);
+  }, [error, translation, fetchSuratListData]);
 
   useEffect(() => {
     fetchData();

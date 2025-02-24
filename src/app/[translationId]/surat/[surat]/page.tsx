@@ -1,15 +1,14 @@
-import OneQuran from "@/components/page/OneQuran";
-import { SuratResponse } from "@/lib/quran-model";
+import SingleSurat from "@/components/page/SingleSurat";
 import React from "react";
 
 export async function generateStaticParams() {
-  const quranList = await fetch(
-    `https://quran-api2.vercel.app/api/list-surat`
-  ).then((res) => res.json());
+  const suratList: { surat: string }[] = [];
 
-  return quranList.data.map((quran: SuratResponse) => ({
-    surat: quran.number_of_surah,
-  }));
+  for (let i = 1; i <= 114; i++) {
+    suratList.push({ surat: i.toString() });
+  }
+
+  return suratList;
 }
 
 const page = async ({
@@ -20,8 +19,8 @@ const page = async ({
   const { surat } = await params;
 
   return (
-    <div className="text-white">
-      <OneQuran id={surat} />
+    <div className="text-white relative">
+      <SingleSurat id={surat} />
     </div>
   );
 };
