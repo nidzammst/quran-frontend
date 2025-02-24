@@ -23,41 +23,45 @@ interface SingleSuratStore {
 
 interface TranslationIdStore {
   translationId: "id" | "en" | "ar";
+  setTranslationId: (translationId: "id" | "en" | "ar") => void;
 }
 
 const getUrlSearch = () => {
-  return window.location.pathname.split("/")[1] as "id" | "en" | "ar";
+  if (typeof window !== "undefined" && window.location) {
+    return window.location.pathname.split("/")[1] as "id" | "en" | "ar";
+  } else {
+    return "id";
+  }
 };
 
-export const useSingleSuratStore = create<SingleSuratStore>()(
-  persist(
-    (set) => ({
-      singleSurat: undefined,
-      loading: true,
-      translationOpen: false,
-      setTranslationOpen: () =>
-        set((state) => ({ translationOpen: !state.translationOpen })),
-      fetchSingleSurat: async (translation, suratNumber) => {
-        try {
-          const data = await fetchSingleSurat(translation, suratNumber);
-          set({ singleSurat: data, loading: false });
-          return;
-        } catch (error) {
-          console.log(error);
-          set({ loading: false });
-        }
-      },
-    }),
-    {
-      name: "single-surat",
-      partialize: (state) => ({
-        singleSurat: state.singleSurat,
-        translationOpen: state.translationOpen,
-      }),
-      // storage: createJSONStorage(() => localStorage),
-    }
-  )
-);
+// export const useSingleSuratStore = create<SingleSuratStore>()(
+//   persist(
+//     (set) => ({
+//       singleSurat: undefined,
+//       loading: true,
+//       translationOpen: false,
+//       setTranslationOpen: () =>
+//         set((state) => ({ translationOpen: !state.translationOpen })),
+//       fetchSingleSurat: async (translation, suratNumber) => {
+//         try {
+//           const data = await fetchSingleSurat(translation, suratNumber);
+//           set({ singleSurat: data, loading: false });
+//           return;
+//         } catch (error) {
+//           console.log(error);
+//           set({ loading: false });
+//         }
+//       },
+//     }),
+//     {
+//       name: "single-surat",
+//       partialize: (state) => ({
+//         singleSurat: state.singleSurat,
+//         translationOpen: state.translationOpen,
+//       }),
+//     }
+//   )
+// );
 
 export const useQuranStore = create<SuratListStore>()(
   persist(
@@ -80,6 +84,24 @@ export const useQuranStore = create<SuratListStore>()(
     }
   )
 );
+
+export const useSingleSuratStore = create<SingleSuratStore>()((set) => ({
+  singleSurat: undefined,
+  loading: true,
+  translationOpen: false,
+  setTranslationOpen: () =>
+    set((state) => ({ translationOpen: !state.translationOpen })),
+  fetchSingleSurat: async (translation, suratNumber) => {
+    try {
+      const data = await fetchSingleSurat(translation, suratNumber);
+      set({ singleSurat: data, loading: false });
+      return;
+    } catch (error) {
+      console.log(error);
+      set({ loading: false });
+    }
+  },
+}));
 
 export const useTranslationIdStore = create<TranslationIdStore>()((set) => ({
   translationId: getUrlSearch(),

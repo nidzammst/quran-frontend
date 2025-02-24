@@ -19,37 +19,65 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
+import { useTranslationIdStore } from "@/lib/stores/store";
 
-export function SuratComboBox() {
-  const surat: number[] = [];
+const surat: number[] = [];
 
-  for (let i = 1; i <= 114; i++) {
-    surat.push(i);
-  }
+for (let i = 1; i <= 114; i++) {
+  surat.push(i);
+}
+
+export function SuratComboBox({ hidden }: { hidden: boolean }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+  const { translationId } = useTranslationIdStore();
 
   const router = useRouter();
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className="max-w-[130px]">
+      <PopoverTrigger
+        asChild
+        className={`${hidden && "hidden"} max-w-[130px] max-sm:max-w-[100px]`}
+      >
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[130px] justify-between"
+          className="w-[130px] px-0 justify-between"
         >
-          {value
-            ? `surat ${surat.find((surat) => surat.toString() === value)}`
-            : "Pilih surat..."}
-          <ChevronsUpDown className="opacity-50" />
+          <span className="flex flex-row -ml-1 gap-1 content-center items-center w-full justify-between pl-3">
+            {value
+              ? `Surat ${surat.find((surat) => surat.toString() === value)}`
+              : translationId === "en"
+              ? "Select Surat"
+              : translationId === "id"
+              ? "Pilih Surat"
+              : "حدد حرف"}
+            <ChevronsUpDown className="opacity-50" />
+          </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[130px] p-0">
+      <PopoverContent className="w-[130px] p-0 max-sm:max-w-[100px]">
         <Command>
-          <CommandInput placeholder="Search surat..." className="h-9" />
+          <CommandInput
+            placeholder={
+              translationId === "en"
+                ? "Search Surat..."
+                : translationId === "id"
+                ? "Cari Surat..."
+                : "البحث عن الحروف"
+            }
+            className="h-9"
+          />
           <CommandList>
-            <CommandEmpty>No surat found.</CommandEmpty>
+            <CommandEmpty>
+              {translationId === "en"
+                ? "No surat found."
+                : translationId === "id"
+                ? "Surat tidak ditemukan"
+                : "لم يتم العثور على رسالة"}
+            </CommandEmpty>
             <CommandGroup>
               {surat.map((surat) => (
                 <CommandItem
@@ -61,7 +89,7 @@ export function SuratComboBox() {
                     setOpen(false);
                   }}
                 >
-                  surat {surat.toString()}
+                  Surat {surat.toString()}
                   <Check
                     className={cn(
                       "ml-auto",

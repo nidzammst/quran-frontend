@@ -3,6 +3,7 @@ import { Inter, Noto_Naskh_Arabic } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/ui/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,7 +32,8 @@ export default function RootLayout({
       <body className={` ${inter.variable} ${notoNaskh.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <Header />
-          {children}
+          <div className="w-full mt-4 max-sm:mt-12">{children}</div>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

@@ -20,8 +20,15 @@ import {
 } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
 import { useTranslationIdStore } from "@/lib/stores/store";
+import { convertArabicToLatin } from "@/lib/latinToArabic";
 
-export function VerseComboBox({ ayat }: { ayat: number[] }) {
+export function VerseComboBox({
+  ayat,
+  hidden,
+}: {
+  ayat: number[];
+  hidden: boolean;
+}) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -30,24 +37,29 @@ export function VerseComboBox({ ayat }: { ayat: number[] }) {
   const router = useRouter();
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className="max-w-[130px]">
+      <PopoverTrigger
+        asChild
+        className={`max-w-[130px] max-sm:max-w-[100px] ${hidden && "hidden"}`}
+      >
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[130px] justify-between"
+          className="w-[130px] px-0 justify-between"
         >
-          {value
-            ? `Ayat ${ayat.find((ayat) => ayat.toString() === value)}`
-            : translationId === "id"
-            ? "Pilih Ayat"
-            : translationId === "en"
-            ? "Select verse"
-            : "حدد الآية"}
-          <ChevronsUpDown className="opacity-50" />
+          <span className="flex flex-row -ml-1 gap-1 content-center items-center w-full justify-between pl-3">
+            {value
+              ? `Ayat ${ayat.find((ayat) => ayat.toString() === value)}`
+              : translationId === "id"
+              ? "Pilih Ayat"
+              : translationId === "en"
+              ? "Select verse"
+              : "حدد الآية"}
+            <ChevronsUpDown className="opacity-50" />
+          </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[130px] p-0">
+      <PopoverContent className="w-[130px] p-0 max-sm:max-w-[100px]">
         <Command>
           <CommandInput placeholder="Search ayat..." className="h-9" />
           <CommandList>
@@ -64,7 +76,7 @@ export function VerseComboBox({ ayat }: { ayat: number[] }) {
                   key={ayat.toString()}
                   value={ayat.toString()}
                   onSelect={(currentValue) => {
-                    router.push(`#ayat-${ayat.toString()}`);
+                    router.push(`#${convertArabicToLatin(ayat)}`);
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
