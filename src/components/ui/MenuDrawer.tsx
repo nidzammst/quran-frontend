@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "./button";
 import {
@@ -27,6 +27,7 @@ import { Separator } from "./separator";
 const MenuDrawer = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const { setTheme } = useTheme();
   const {
     translationOpen,
@@ -44,6 +45,10 @@ const MenuDrawer = () => {
     const newPath = path.join("/");
     router.push(newPath);
   };
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (theme === "dark") {
@@ -80,7 +85,7 @@ const MenuDrawer = () => {
   }, [theme]);
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger className="h-8 w-8 mr-3">
         <Button variant="outline">
           <Menu className="h-6 w-6" />

@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "./dialog";
 import { Button } from "./button";
 import { Search } from "lucide-react";
 import { SearchComboBox } from "../SearchComboBox";
+import { usePathname } from "next/navigation";
 
 const SearchTrigger = () => {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button variant="outline">
           <Search className="h-4 w-4" />

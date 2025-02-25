@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import MenuDrawer from "./MenuDrawer";
 import SearchTrigger from "./SearchTrigger";
 import { useSingleSuratStore, useSiteSettingsStore } from "@/lib/stores/store";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   const [showHeader, setShowHeader] = useState(true);
@@ -100,19 +101,29 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`z-50 fixed top-0 left-0 w-full justify-between bg-black border border-zinc-800 shadow-md shadow-zinc-900 transition-transform duration-300 ${
+      className={`z-50 fixed top-0 left-0 w-full justify-between bg-black border border-zinc-800 shadow-md shadow-zinc-900 transition-transform duration-300 flex flex-row content-center items-center ${
         showHeader ? "transform translate-y-0" : "transform -translate-y-full"
-      }`}
+      } ${pathname.split("/").length > 2 && "py-4"}`}
     >
-      <div className="max-w-7xl mx-auto p-4 flex flex-row justify-between max-sm:justify-end">
-        <h1
-          className={`text-xl font-bold cursor-pointer max-sm:hidden`}
-          onClick={() => router.push("/")}
-        >
-          Al-Qur&apos;anul Karim
-        </h1>
-
-        <div className="w-full flex content-center items-start gap-2 flex-row-reverse">
+      <div
+        className={`relative hidden dark:flex cursor-pointer ${
+          pathname.split("/").length > 2 && "dark:hidden"
+        }`}
+      >
+        <Image
+          alt="al-qur'an-logo"
+          height={80}
+          width={80}
+          src={"/kitab-dark.png"}
+          className=""
+          onClick={() => router.push(`${translationId}`)}
+        />
+        <span className="font-arabic font-extrabold text-right items-center content-center -ml-2">
+          القرآن الكريم
+        </span>
+      </div>
+      <div className="max-w-7xl mx-auto p-4 flex flex-row justify-end max-sm:justify-end">
+        <div className="w-full flex content-center items-center gap-2 flex-row-reverse absolute right-0 mr-4 top-0 mt-3">
           <MenuDrawer />
           <SearchTrigger />
           <div className="flex flex-row gap-3 justify-start max-sm:flex-wrap">
