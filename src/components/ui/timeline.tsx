@@ -74,7 +74,7 @@ export const Timeline = ({
               </div>
             </div>
 
-            <div className="md:hidden flex flex-col gap-1 relative pl-20 pr-4 max-sm:pl-7 pt-1 md:pl-4 w-full mr-2">
+            <div className="md:hidden sticky flex flex-col gap-1 pl-20 pr-4 max-sm:pl-7 pt-1 md:pl-4 w-full mr-2">
               <h3 className="block text-2xl mb-4 text-left font-extrabold text-neutral-500 dark:text-neutral-500 rounded-full mt-2 p-3 border border-zinc-900 shadow-sm shadow-neutral-800 h-12 w-12 pl-4">
                 {item.title}
               </h3>
@@ -87,7 +87,7 @@ export const Timeline = ({
           style={{
             height: height + "px",
           }}
-          className="absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%]  [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] max-sm:-ml-7"
+          className="absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)] max-sm:-ml-7"
         >
           <motion.div
             style={{

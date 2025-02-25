@@ -59,7 +59,7 @@ export function SwipeNavigator({
         });
       } else {
         toast("Surat tidak berganti saat menggeser secara Horizontal", {
-          description: "Sunday, December 03, 2023 at 9:00 AM",
+          description: "Surat tidak berganti saat menggeser secara Horizontal",
           action: {
             label: "Aktifkan",
             onClick: () => setHorizontalSwipe(),
