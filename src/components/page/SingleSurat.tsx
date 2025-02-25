@@ -73,6 +73,7 @@ const SingleSurat = ({ id }: { id: string }) => {
             <Bookmark
               size={48}
               strokeWidth={3}
+              color="#5d5b5b"
               className={`${
                 ayatSaved.surat === singleSurat.number_of_surah.toString() &&
                 ayatSaved.ayat === vers.number.toString()
