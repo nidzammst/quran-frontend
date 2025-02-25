@@ -19,7 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
-import { useTranslationIdStore } from "@/lib/stores/store";
+import { useSiteSettingsStore } from "@/lib/stores/store";
 
 const surat: number[] = [];
 
@@ -30,7 +30,7 @@ for (let i = 1; i <= 114; i++) {
 export function SuratComboBox({ hidden }: { hidden: boolean }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
-  const { translationId } = useTranslationIdStore();
+  const { translationId } = useSiteSettingsStore();
 
   const router = useRouter();
 

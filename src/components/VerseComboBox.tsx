@@ -19,8 +19,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
-import { useTranslationIdStore } from "@/lib/stores/store";
 import { convertArabicToLatin } from "@/lib/latinToArabic";
+import { useSiteSettingsStore } from "@/lib/stores/store";
 
 export function VerseComboBox({
   ayat,
@@ -32,7 +32,7 @@ export function VerseComboBox({
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
-  const { translationId } = useTranslationIdStore();
+  const { translationId } = useSiteSettingsStore();
 
   const router = useRouter();
   return (

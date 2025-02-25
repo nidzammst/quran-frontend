@@ -13,6 +13,7 @@ import React from "react";
 import { Button } from "./ui/button";
 
 import "./custom-drawer.css";
+import { useSingleSuratStore } from "@/lib/stores/store";
 
 const CustomDrawer = ({
   type,
@@ -25,9 +26,14 @@ const CustomDrawer = ({
   title: string;
   content: string | undefined;
 }) => {
+  const { customDrawerOpen } = useSingleSuratStore();
   return (
     <Drawer>
-      <DrawerTrigger className="text-white mt-4 w-full bg-transparent">
+      <DrawerTrigger
+        className={`text-white mt-4 w-full bg-transparent ${
+          !customDrawerOpen && "hidden"
+        }`}
+      >
         <Button variant="secondary" className="w-full">
           {lang === "id"
             ? `Buka ${type === "tafsir" ? type : "Terjemahan"}`

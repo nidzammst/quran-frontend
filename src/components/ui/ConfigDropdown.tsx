@@ -11,12 +11,12 @@ import {
 import Link from "next/link";
 import { Button } from "./button";
 import { usePathname, useRouter } from "next/navigation";
-import { useTranslationIdStore } from "@/lib/stores/store";
+import { useSiteSettingsStore } from "@/lib/stores/store";
 
-export function MyDropdownMenu() {
+export function ConfigDropdown() {
   const pathname = usePathname();
   const router = useRouter();
-  const { setTranslationId } = useTranslationIdStore();
+  const { setTranslationId } = useSiteSettingsStore();
 
   const changePathname = (lang: "id" | "ar" | "en"): void => {
     setTranslationId(lang);
@@ -80,7 +80,6 @@ export function MyDropdownMenu() {
         </DropdownMenuItem>
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuItem disabled>API</DropdownMenuItem>
-        <DropdownMenuSeparator />
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSingleSuratStore, useTranslationIdStore } from "@/lib/stores/store";
+import { useSingleSuratStore, useSiteSettingsStore } from "@/lib/stores/store";
 import React, { useCallback, useEffect } from "react";
 import CustomDrawer from "../CustomDrawer";
 import { convertToArabicNumbers } from "@/lib/latinToArabic";
@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 const SingleSurat = ({ id }: { id: string }) => {
   const { fetchSingleSurat, singleSurat, translationOpen, loading } =
     useSingleSuratStore();
-  const { translationId } = useTranslationIdStore();
+  const { translationId } = useSiteSettingsStore();
   const lang = usePathname().split("/")[1];
 
   const fetchData = useCallback(() => {

@@ -12,18 +12,22 @@ interface SuratListStore {
 
 interface SingleSuratStore {
   singleSurat: OneSuratResponse | undefined;
-  translationOpen: boolean;
   loading: boolean;
   fetchSingleSurat: (
     translation: "id" | "en" | "ar",
     suratNumber: string
   ) => Promise<void>;
+  translationOpen: boolean;
   setTranslationOpen: () => void;
+  customDrawerOpen: boolean;
+  setCustomDrawerOpen: () => void;
 }
 
-interface TranslationIdStore {
+interface SiteSettingsStore {
   translationId: "id" | "en" | "ar";
   setTranslationId: (translationId: "id" | "en" | "ar") => void;
+  theme: "light" | "dark" | "system";
+  setThemeStore: (theme: "light" | "dark" | "system") => void;
 }
 
 const getUrlSearch = () => {
@@ -33,35 +37,6 @@ const getUrlSearch = () => {
     return "id";
   }
 };
-
-// export const useSingleSuratStore = create<SingleSuratStore>()(
-//   persist(
-//     (set) => ({
-//       singleSurat: undefined,
-//       loading: true,
-//       translationOpen: false,
-//       setTranslationOpen: () =>
-//         set((state) => ({ translationOpen: !state.translationOpen })),
-//       fetchSingleSurat: async (translation, suratNumber) => {
-//         try {
-//           const data = await fetchSingleSurat(translation, suratNumber);
-//           set({ singleSurat: data, loading: false });
-//           return;
-//         } catch (error) {
-//           console.log(error);
-//           set({ loading: false });
-//         }
-//       },
-//     }),
-//     {
-//       name: "single-surat",
-//       partialize: (state) => ({
-//         singleSurat: state.singleSurat,
-//         translationOpen: state.translationOpen,
-//       }),
-//     }
-//   )
-// );
 
 export const useQuranStore = create<SuratListStore>()(
   persist(
@@ -91,6 +66,9 @@ export const useSingleSuratStore = create<SingleSuratStore>()((set) => ({
   translationOpen: false,
   setTranslationOpen: () =>
     set((state) => ({ translationOpen: !state.translationOpen })),
+  customDrawerOpen: false,
+  setCustomDrawerOpen: () =>
+    set((state) => ({ customDrawerOpen: !state.customDrawerOpen })),
   fetchSingleSurat: async (translation, suratNumber) => {
     try {
       const data = await fetchSingleSurat(translation, suratNumber);
@@ -103,7 +81,9 @@ export const useSingleSuratStore = create<SingleSuratStore>()((set) => ({
   },
 }));
 
-export const useTranslationIdStore = create<TranslationIdStore>()((set) => ({
+export const useSiteSettingsStore = create<SiteSettingsStore>()((set) => ({
   translationId: getUrlSearch(),
   setTranslationId: (id: "id" | "en" | "ar") => set({ translationId: id }),
+  theme: "system",
+  setThemeStore: (theme: "light" | "dark" | "system") => set({ theme }),
 }));

@@ -1,31 +1,20 @@
 "use client";
 
-import { useSingleSuratStore, useTranslationIdStore } from "@/lib/stores/store";
 import { useCallback, useEffect, useState } from "react";
 import { VerseComboBox } from "../VerseComboBox";
-import { House, Languages, Search } from "lucide-react";
-import { Toggle } from "./toggle";
 import { SuratComboBox } from "../SuratComboBox";
 import { toast } from "sonner";
-import { MyDropdownMenu } from "./MyDropdownMenu";
 import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { Button } from "./button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import MenuDrawer from "./MenuDrawer";
+import SearchTrigger from "./SearchTrigger";
+import { useSingleSuratStore, useSiteSettingsStore } from "@/lib/stores/store";
 
 const Header: React.FC = () => {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { singleSurat, translationOpen, setTranslationOpen } =
+  const { singleSurat, translationOpen, customDrawerOpen } =
     useSingleSuratStore();
-  const { translationId } = useTranslationIdStore();
+  const { translationId } = useSiteSettingsStore();
 
   const pathname = usePathname();
   const router = useRouter();
@@ -78,6 +67,26 @@ const Header: React.FC = () => {
   }, [translationOpen]);
 
   useEffect(() => {
+    if (customDrawerOpen) {
+      toast(
+        `${
+          translationId === "id"
+            ? "Menu Terjemahan dan Tafsir tertutup"
+            : "Translation and Tafsir menu has been closed"
+        }`
+      );
+    } else if (!customDrawerOpen) {
+      toast(
+        `${
+          translationId === "id"
+            ? "Menu Terjemahan dan Tafsir terbuka"
+            : "Translation and Tafsir menu has been appeared"
+        }`
+      );
+    }
+  }, [customDrawerOpen]);
+
+  useEffect(() => {
     toast(
       `${
         translationId === "id"
@@ -103,54 +112,15 @@ const Header: React.FC = () => {
           Al-Qur&apos;anul Karim
         </h1>
 
-        <div className="flex flex-row content-center items-start gap-2 max-sm:">
+        <div className="w-full flex content-center items-start gap-2 flex-row-reverse">
+          <MenuDrawer />
+          <SearchTrigger />
           <div className="flex flex-row gap-3 justify-start max-sm:flex-wrap">
             <SuratComboBox hidden={pathname.split("/").length <= 2} />
             <VerseComboBox
               hidden={pathname.split("/").length <= 2}
               ayat={singleSurat?.verses.map((vers) => vers.number) ?? []}
             />
-            <MyDropdownMenu />
-            <Dialog>
-              <DialogTrigger>
-                <Button
-                  variant="outline"
-                  className={`max-w-[130px] max-sm:max-w-[100px] ${
-                    pathname.split("/").length > 2 && "hidden"
-                  }`}
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Are you absolutely sure?</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-          </div>
-          <div className="flex flex-row flex-wrap gap-2">
-            <Toggle
-              pressed={translationOpen}
-              variant="outline"
-              onPressedChange={() => setTranslationOpen()}
-            >
-              <Languages className="h-4 w-4" />
-            </Toggle>
-            <Link
-              href={`/${translationId}`}
-              className={`${
-                pathname.split("/").length <= 2 ? "hidden" : "sm:hidden"
-              }`}
-            >
-              <Button variant="outline">
-                <House className="h-4 w-4" />
-              </Button>
-            </Link>
           </div>
         </div>
       </div>
