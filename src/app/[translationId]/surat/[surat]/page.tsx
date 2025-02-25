@@ -1,4 +1,5 @@
 import SingleSurat from "@/components/page/SingleSurat";
+import { SwipeNavigator } from "@/components/page/SwipeNavigator";
 import React from "react";
 
 export async function generateStaticParams() {
@@ -18,10 +19,18 @@ const page = async ({
 }) => {
   const { surat } = await params;
 
+  const routes = [
+    (Number(surat) - 1).toString(),
+    surat,
+    (Number(surat) + 1).toString(),
+  ];
+
   return (
-    <div className="text-white relative">
-      <SingleSurat id={surat} />
-    </div>
+    <SwipeNavigator routes={routes}>
+      <div className="text-white relative">
+        <SingleSurat id={surat} />
+      </div>
+    </SwipeNavigator>
   );
 };
 

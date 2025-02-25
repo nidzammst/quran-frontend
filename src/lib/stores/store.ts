@@ -21,6 +21,8 @@ interface SingleSuratStore {
   setTranslationOpen: () => void;
   customDrawerOpen: boolean;
   setCustomDrawerOpen: () => void;
+  horizontalSwipe: boolean;
+  setHorizontalSwipe: () => void;
 }
 
 interface SiteSettingsStore {
@@ -69,6 +71,9 @@ export const useSingleSuratStore = create<SingleSuratStore>()((set) => ({
   customDrawerOpen: false,
   setCustomDrawerOpen: () =>
     set((state) => ({ customDrawerOpen: !state.customDrawerOpen })),
+  horizontalSwipe: true,
+  setHorizontalSwipe: () =>
+    set((state) => ({ horizontalSwipe: !state.horizontalSwipe })),
   fetchSingleSurat: async (translation, suratNumber) => {
     try {
       const data = await fetchSingleSurat(translation, suratNumber);

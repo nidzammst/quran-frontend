@@ -8,7 +8,7 @@ import { Timeline, TimelineEntry } from "../ui/timeline";
 import { usePathname } from "next/navigation";
 
 const SingleSurat = ({ id }: { id: string }) => {
-  const { fetchSingleSurat, singleSurat, translationOpen, loading } =
+  const { fetchSingleSurat, singleSurat, translationOpen } =
     useSingleSuratStore();
   const { translationId } = useSiteSettingsStore();
   const lang = usePathname().split("/")[1];
@@ -76,17 +76,17 @@ const SingleSurat = ({ id }: { id: string }) => {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="absolute top-0 left-0 w-full">
-        {singleSurat !== undefined && !loading ? (
+      <div className="absolute top-0 left-0 w-full font-latin">
+        {singleSurat !== undefined ? (
           <Timeline
             data={ayatData as TimelineEntry[]}
             customData={{
-              title: `${singleSurat.name} (${singleSurat.number_of_ayah} ${
-                translationId === "en" ? "Verses" : "Ayat"
-              })`,
+              title: `${singleSurat.number_of_surah}. ${singleSurat.name}`,
               description:
                 translationId === "id"
-                  ? singleSurat.name_translations.id
+                  ? `${singleSurat.name_translations.id} (${
+                      singleSurat.number_of_ayah
+                    } ${translationId === "id" ? "Ayat" : "Verses"})`
                   : translationId === "en"
                   ? singleSurat.name_translations.en
                   : singleSurat.name_translations.ar,

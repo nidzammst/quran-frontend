@@ -35,7 +35,7 @@ const CustomDrawer = ({
       >
         <Button variant="secondary" className="w-full">
           {lang === "id"
-            ? `Buka ${type === "tafsir" ? type : "Terjemahan"}`
+            ? `Buka ${type === "tafsir" ? "Tafsir" : "Terjemahan"}`
             : `Open ${type}`}
         </Button>
       </DrawerTrigger>
@@ -57,7 +57,7 @@ const CustomDrawer = ({
           <DrawerDescription>
             <h3 className="text-neutral-800 dark:text-neutral-200 text-4xl font-bold text-left max-sm:text-2xl mt-4">
               {type === "tafsir"
-                ? "Tafsir"
+                ? "Tafsir Kemenag RI"
                 : lang === "id"
                 ? "Terjemahan"
                 : "Translation"}{" "}

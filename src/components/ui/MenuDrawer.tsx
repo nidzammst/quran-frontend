@@ -238,7 +238,9 @@ const MenuDrawer = () => {
             <Separator
               orientation="vertical"
               className={`h-10 relative top-0 ${
-                translationId === "ar" && "hidden"
+                translationId === "ar" || pathname.split("/").length <= 2
+                  ? "hidden"
+                  : ""
               } `}
             />
 
@@ -250,7 +252,9 @@ const MenuDrawer = () => {
                     variant="outline"
                     onPressedChange={() => setTranslationOpen()}
                     className={`${
-                      translationId === "ar" ? "hidden" : "w-full"
+                      translationId === "ar" || pathname.split("/").length <= 2
+                        ? "hidden"
+                        : "w-full"
                     }`}
                   >
                     <Languages className="h-4 w-4" />

@@ -8,6 +8,7 @@ import {
 } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import SharebleComponent from "../SharebleComponent";
+import { Bookmark } from "lucide-react";
 
 export interface TimelineEntry {
   title: string;
@@ -51,7 +52,7 @@ export const Timeline = ({
       ref={containerRef}
     >
       <div className="max-w-7xl mx-auto py-20">
-        <h2 className="text-6xl text-center font-extrabold mb-4 text-black dark:text-white">
+        <h2 className="text-6xl text-center font-extrabold mb-4 text-black dark:text-white max-sm:text-4xl">
           {customData.title}
         </h2>
         <p className="text-neutral-700 text-center font-semibold text-lg dark:text-neutral-300">
@@ -71,11 +72,13 @@ export const Timeline = ({
               </h3>
             </div>
 
-            <div className="relative pl-20 pr-4 max-sm:pl-7 pt-1 md:pl-4 w-full">
+            <div className="flex flex-row gap-4 relative pl-20 pr-4 max-sm:pl-7 pt-1 md:pl-4 w-full">
+              <Bookmark className="text-white" />
               <h3 className="md:hidden block text-2xl mb-4 text-left font-bold text-neutral-500 dark:text-neutral-500">
                 {item.title}
               </h3>
-              {item.content}
+
+              <div>{item.content}</div>
             </div>
           </SharebleComponent>
         ))}
