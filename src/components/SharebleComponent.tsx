@@ -37,10 +37,7 @@ const SharebleComponent = ({ id, children }: ScrollComponentProps) => {
   }, [id]);
 
   return (
-    <div
-      id={id}
-      className="flex justify-start max-sm:justify-end pt-10 md:pt-40 md:gap-10 max-md:mb-8 font-arabic"
-    >
+    <div id={id} className="flex justify-start max-sm:justify-end font-arabic">
       {children}
     </div>
   );

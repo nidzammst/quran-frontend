@@ -30,6 +30,8 @@ interface SiteSettingsStore {
   setTranslationId: (translationId: "id" | "en" | "ar") => void;
   theme: "light" | "dark" | "system";
   setThemeStore: (theme: "light" | "dark" | "system") => void;
+  ayatSaved: { surat: string; ayat: string };
+  saveAyatData: (data: { surat: string; ayat: string }) => void;
 }
 
 const getUrlSearch = () => {
@@ -86,9 +88,19 @@ export const useSingleSuratStore = create<SingleSuratStore>()((set) => ({
   },
 }));
 
-export const useSiteSettingsStore = create<SiteSettingsStore>()((set) => ({
-  translationId: getUrlSearch(),
-  setTranslationId: (id: "id" | "en" | "ar") => set({ translationId: id }),
-  theme: "system",
-  setThemeStore: (theme: "light" | "dark" | "system") => set({ theme }),
-}));
+export const useSiteSettingsStore = create<SiteSettingsStore>()(
+  persist(
+    (set) => ({
+      translationId: getUrlSearch(),
+      setTranslationId: (id: "id" | "en" | "ar") => set({ translationId: id }),
+      theme: "system",
+      setThemeStore: (theme: "light" | "dark" | "system") => set({ theme }),
+      ayatSaved: { surat: "", ayat: "" },
+      saveAyatData: (data) => set(() => ({ ayatSaved: data })),
+    }),
+    {
+      name: "ayat-saved-store",
+      partialize: (state) => ({ ayatSaved: state.ayatSaved }),
+    }
+  )
+);

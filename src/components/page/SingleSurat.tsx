@@ -6,11 +6,13 @@ import CustomDrawer from "../CustomDrawer";
 import { convertToArabicNumbers } from "@/lib/latinToArabic";
 import { Timeline, TimelineEntry } from "../ui/timeline";
 import { usePathname } from "next/navigation";
+import { Toggle } from "../ui/toggle";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 
 const SingleSurat = ({ id }: { id: string }) => {
   const { fetchSingleSurat, singleSurat, translationOpen } =
     useSingleSuratStore();
-  const { translationId } = useSiteSettingsStore();
+  const { translationId, ayatSaved, saveAyatData } = useSiteSettingsStore();
   const lang = usePathname().split("/")[1];
 
   const fetchData = useCallback(() => {
@@ -48,6 +50,48 @@ const SingleSurat = ({ id }: { id: string }) => {
               <span className="font-bold italic text-3xl mr-1">&quot;</span>
             )}
           </h4>
+
+          <Toggle
+            pressed={
+              ayatSaved.surat === singleSurat.number_of_surah.toString() &&
+              ayatSaved.ayat === vers.number.toString()
+            }
+            variant="outline"
+            onPressedChange={() => {
+              saveAyatData({
+                surat: singleSurat.number_of_surah.toString(),
+                ayat: vers.number.toString(),
+              });
+            }}
+            className="w-full"
+          >
+            <span className="font-latin font-thin mr-12">
+              {translationId === "id"
+                ? "Tandai ke terakhir baca"
+                : "mark as last read"}
+            </span>
+            <Bookmark
+              size={48}
+              strokeWidth={3}
+              className={`${
+                ayatSaved.surat === singleSurat.number_of_surah.toString() &&
+                ayatSaved.ayat === vers.number.toString()
+                  ? "hidden"
+                  : ""
+              }`}
+            />
+            <BookmarkCheck
+              size={48}
+              strokeWidth={3}
+              className={`${
+                ayatSaved.surat === singleSurat.number_of_surah.toString() &&
+                ayatSaved.ayat === vers.number.toString()
+                  ? ""
+                  : "hidden"
+              }`}
+            />
+          </Toggle>
+
           {translationId !== "ar" && (
             <CustomDrawer
               type="translation"

@@ -8,7 +8,6 @@ import {
 } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import SharebleComponent from "../SharebleComponent";
-import { Bookmark } from "lucide-react";
 
 export interface TimelineEntry {
   title: string;
@@ -63,22 +62,24 @@ export const Timeline = ({
       <div ref={ref} className="relative max-w-7xl mx-auto pb-20">
         {data.map((item, index) => (
           <SharebleComponent key={index} id={convertArabicToLatin(item.title)}>
-            <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full max-sm:-ml-7">
-              <div className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-white dark:bg-black flex items-center justify-center max-sm:-ml-7">
+            <div className="max-md:hidden sticky flex flex-col top-40 pl-20 pr-4 max-sm:pl-7 pt-1 w-full mr-2 md:w-full max-sm:-ml-7">
+              <h3 className="md:block text-3xl md:text-5xl font-extrabold text-neutral-500 dark:text-neutral-500 rounded-full border border-zinc-900 shadow-sm shadow-neutral-800 h-16 w-16 pl-5 pt-3">
+                {item.title}
+              </h3>
+
+              <span>{item.content}</span>
+
+              <div className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-white dark:bg-black flex flex-col items-center justify-center max-sm:-ml-7">
                 <div className="h-4 w-4 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 p-2" />
               </div>
-              <h3 className="hidden md:block text-xl md:pl-20 md:text-5xl font-extrabold text-neutral-500 dark:text-neutral-500 rounded-full p-2 mt-2 pr-3 border border-zinc-900 shadow-sm shadow-neutral-800">
-                {item.title}
-              </h3>
             </div>
 
-            <div className="flex flex-row gap-4 relative pl-20 pr-4 max-sm:pl-7 pt-1 md:pl-4 w-full">
-              <Bookmark className="text-white" />
-              <h3 className="md:hidden block text-2xl mb-4 text-left font-bold text-neutral-500 dark:text-neutral-500">
+            <div className="md:hidden flex flex-col gap-1 relative pl-20 pr-4 max-sm:pl-7 pt-1 md:pl-4 w-full mr-2">
+              <h3 className="block text-2xl mb-4 text-left font-extrabold text-neutral-500 dark:text-neutral-500 rounded-full mt-2 p-3 border border-zinc-900 shadow-sm shadow-neutral-800 h-12 w-12 pl-4">
                 {item.title}
               </h3>
 
-              <div>{item.content}</div>
+              <span>{item.content}</span>
             </div>
           </SharebleComponent>
         ))}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "./button";
 import {
+  BookmarkCheck,
   House,
   Languages,
   LaptopMinimal,
@@ -35,7 +36,7 @@ const MenuDrawer = () => {
     customDrawerOpen,
     setCustomDrawerOpen,
   } = useSingleSuratStore();
-  const { translationId, setTranslationId, theme, setThemeStore } =
+  const { translationId, setTranslationId, theme, setThemeStore, ayatSaved } =
     useSiteSettingsStore();
 
   const changePathname = (lang: "id" | "ar" | "en"): void => {
@@ -269,6 +270,38 @@ const MenuDrawer = () => {
             </TooltipProvider>
           </div>
         </div>
+
+        {ayatSaved.surat !== "" && ayatSaved.ayat !== "" && (
+          <>
+            <Separator
+              orientation="vertical"
+              className={`h-24 max-sm:hidden`}
+            />
+            <div className="w-full">
+              <h3 className="font-bold mb-2">Saved</h3>
+              <div className="flex flex-row gap-2 justify-between">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Button
+                        className="w-full"
+                        variant="outline"
+                        onClick={() =>
+                          router.push(
+                            `/${translationId}/surat/${ayatSaved.surat}#${ayatSaved.ayat}`
+                          )
+                        }
+                      >
+                        <BookmarkCheck size={48} strokeWidth={3} className="" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Buka ayat terakhir baca</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </div>
+          </>
+        )}
       </DrawerContent>
     </Drawer>
   );
