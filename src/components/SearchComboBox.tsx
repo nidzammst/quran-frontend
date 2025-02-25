@@ -21,6 +21,7 @@ import {
   PaginationPrevious,
 } from "./ui/pagination";
 import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
 
 export function SearchComboBox() {
   const pathname = usePathname();
@@ -39,8 +40,6 @@ export function SearchComboBox() {
   useEffect(() => {
     fetchSuratListData().then((surat) => setSuratList(surat));
   }, []);
-
-  console.log(searchSuratData);
 
   useEffect(() => {
     const fetchData = async (page: number, size: number) => {
@@ -93,7 +92,7 @@ export function SearchComboBox() {
         }}
       >
         <div
-          className={`flex flex-row gap-2 ${
+          className={`flex flex-row gap-2 mb-2 ${
             pathname.split("/").length > 2 && "hidden"
           }`}
         >
@@ -161,7 +160,7 @@ export function SearchComboBox() {
           value={search}
           onValueChange={setSearch}
         />
-        <CommandList className="h-full">
+        <CommandList className="">
           {searchSuratData?.length === 0 && (
             <CommandEmpty>
               <span className="mr-12">No results found for {search}.</span>
@@ -250,94 +249,100 @@ export function SearchComboBox() {
             ))}
         </CommandList>
 
-        <div className="flex flex-row gap-3 content-center">
-          <div className="flex flex-row gap-2">
-            <Toggle
-              pressed={size === 10}
-              variant="outline"
-              onPressedChange={() => setSize(10)}
-              className="w-full"
-            >
-              10
-            </Toggle>
-            <Toggle
-              pressed={size === 20}
-              variant="outline"
-              onPressedChange={() => setSize(20)}
-              className="w-full"
-            >
-              20
-            </Toggle>
-            <Toggle
-              pressed={size === 30}
-              variant="outline"
-              onPressedChange={() => setSize(30)}
-              className="w-full"
-            >
-              30
-            </Toggle>
-          </div>
+        {searchSuratData && (
+          <div className="flex flex-row mt-2 gap-3 content-center">
+            <div className="flex flex-row gap-2">
+              <Toggle
+                pressed={size === 10}
+                variant="outline"
+                onPressedChange={() => setSize(10)}
+                className="w-full"
+              >
+                10
+              </Toggle>
+              <Toggle
+                pressed={size === 20}
+                variant="outline"
+                onPressedChange={() => setSize(20)}
+                className="w-full"
+              >
+                20
+              </Toggle>
+              <Toggle
+                pressed={size === 30}
+                variant="outline"
+                onPressedChange={() => setSize(30)}
+                className="w-full"
+              >
+                30
+              </Toggle>
+            </div>
 
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                {page > 1 && (
-                  <PaginationPrevious
-                    onClick={() => {
-                      setPage(page - 1);
-                      setPages([page - 2, page - 1, page]);
-                    }}
-                  />
+            <Separator orientation="vertical" className="sm:hidden" />
+
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  {page > 1 && (
+                    <PaginationPrevious
+                      className="max-sm:hidden"
+                      onClick={() => {
+                        setPage(page - 1);
+                        setPages([page - 2, page - 1, page]);
+                      }}
+                    />
+                  )}
+                </PaginationItem>
+                {page === 1 && (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
                 )}
-              </PaginationItem>
-              {page === 1 && (
+                {page > 3 && (
+                  <PaginationItem>
+                    <PaginationLink
+                      onClick={() => {
+                        setPage(1);
+                        setPages([0, 1, 2]);
+                      }}
+                      isActive={page === 1}
+                    >
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+                {pages.map(
+                  (p) =>
+                    p > 0 && (
+                      <PaginationItem key={p}>
+                        <PaginationLink
+                          onClick={() => {
+                            setPage(p);
+                            setPages([p - 1, p, p + 1]);
+                          }}
+                          isActive={p === page}
+                        >
+                          {p}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                )}
                 <PaginationItem>
                   <PaginationEllipsis />
                 </PaginationItem>
-              )}
-              {page > 3 && (
                 <PaginationItem>
-                  <PaginationLink
+                  <PaginationNext
+                    className="max-sm:hidden"
                     onClick={() => {
-                      setPage(1);
-                      setPages([0, 1, 2]);
+                      setPage(page + 1);
+                      setPages([page, page + 1, page + 2]);
                     }}
-                    isActive={page === 1}
-                  >
-                    1
-                  </PaginationLink>
+                  />
                 </PaginationItem>
-              )}
-              {pages.map(
-                (p) =>
-                  p > 0 && (
-                    <PaginationItem key={p}>
-                      <PaginationLink
-                        onClick={() => {
-                          setPage(p);
-                          setPages([p - 1, p, p + 1]);
-                        }}
-                        isActive={p === page}
-                      >
-                        {p}
-                      </PaginationLink>
-                    </PaginationItem>
-                  )
-              )}
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => {
-                    setPage(page + 1);
-                    setPages([page, page + 1, page + 2]);
-                  }}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </Command>
     </>
   );
