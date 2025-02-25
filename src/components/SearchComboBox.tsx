@@ -62,8 +62,6 @@ export function SearchComboBox() {
       }
     };
 
-    /* TODO */
-    /* Search word in single surat */
     fetchData(page, size);
   }, [search, translationId, type, page, size]);
 
