@@ -162,14 +162,16 @@ export function SearchComboBox() {
           onValueChange={setSearch}
         />
         <CommandList className="h-full">
-          <CommandEmpty>
-            <span className="mr-12">No results found.</span>
-            {translationId !== "ar" && (
-              <Button onClick={() => router.push("/ar")} variant="outline">
-                Search in Arabic?
-              </Button>
-            )}
-          </CommandEmpty>
+          {searchSuratData?.length === 0 && (
+            <CommandEmpty>
+              <span className="mr-12">No results found for {search}.</span>
+              {translationId !== "ar" && (
+                <Button onClick={() => router.push("/ar")} variant="outline">
+                  Search in Arabic?
+                </Button>
+              )}
+            </CommandEmpty>
+          )}
 
           {!searchSuratData && type === "surat"
             ? suratList?.map((surat) => (

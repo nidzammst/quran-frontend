@@ -19,7 +19,7 @@ const SearchTrigger = () => {
           <Search className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[860px] min-h-[720px]">
+      <DialogContent className="min-w-[860px] min-h-[720px] max-sm:min-w-[375px] max-sm:max-w-[90%] max-sm:min-h-[720px] max-sm:max-h-[80%] max-md:min-w-[640px] max-md:max-w-[90%] max-md:min-h-[820px] max-md:max-h-[80%]">
         <SearchComboBox />
       </DialogContent>
     </Dialog>
