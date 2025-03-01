@@ -9,6 +9,9 @@ import MenuDrawer from "./MenuDrawer";
 import SearchTrigger from "./SearchTrigger";
 import { useSingleSuratStore, useSiteSettingsStore } from "@/lib/stores/store";
 import Image from "next/image";
+import { RawiComboBox } from "../RawiComboBox";
+import { HaditsNumberComboBox } from "../HaditsNumberComboBox";
+import { Rawi } from "@/lib/hadits-model";
 
 const Header: React.FC = () => {
   const [showHeader, setShowHeader] = useState(true);
@@ -18,6 +21,7 @@ const Header: React.FC = () => {
   const { translationId } = useSiteSettingsStore();
 
   const pathname = usePathname();
+
   const router = useRouter();
 
   const controlHeader = useCallback(() => {
@@ -129,10 +133,24 @@ const Header: React.FC = () => {
           <MenuDrawer />
           <SearchTrigger />
           <div className="flex flex-row gap-3 justify-start max-sm:flex-wrap">
-            <SuratComboBox hidden={pathname.split("/").length <= 2} />
+            <SuratComboBox
+              hidden={
+                pathname.split("/").length <= 2 ||
+                pathname.split("/")[1] === "hadits"
+              }
+            />
             <VerseComboBox
-              hidden={pathname.split("/").length <= 2}
+              hidden={
+                pathname.split("/").length <= 2 ||
+                pathname.split("/")[1] === "hadits"
+              }
               ayat={singleSurat?.verses.map((vers) => vers.number) ?? []}
+            />
+
+            <RawiComboBox hidden={pathname.split("/")[1] !== "hadits"} />
+            <HaditsNumberComboBox
+              hidden={pathname.split("/")[1] !== "hadits"}
+              rawi={pathname.split("/")[2] as Rawi}
             />
           </div>
         </div>
