@@ -3,5 +3,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="bg-white">{children}</div>;
+  return (
+    <div className="bg-slate-50 overflow-hidden overflow-y-hidden -mt-4 max-sm:-mt-12">
+      {children}
+    </div>
+  );
 }

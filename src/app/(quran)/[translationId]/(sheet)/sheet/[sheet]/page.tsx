@@ -14,7 +14,7 @@ const page = async ({ params }: { params: Promise<{ sheet: string }> }) => {
 
   return (
     <SwipeNavigator routes={routes}>
-      <div className="bg-white container relative flex h-screen max-sm:w-full w-[62%] max-lg:w-[75%] overflow-y-hidden text-center justify-center mx-auto overflow-clip">
+      <div className="bg-slate-50 container relative flex h-screen max-sm:w-full w-[50%] max-lg:w-[75%] overflow-y-hidden text-center justify-center mx-auto overflow-clip border border-neutral-200 shadow-lg shadow-neutral-300/50">
         <SheetPagination routes={routes} />
         <SingleSheet sheet={sheet} />;
       </div>
