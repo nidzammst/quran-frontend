@@ -103,7 +103,9 @@ const Header: React.FC = () => {
     <header
       className={`z-50 fixed top-0 left-0 w-full justify-between bg-black border border-zinc-800 shadow-md shadow-zinc-900 transition-transform duration-300 flex flex-row content-center items-center ${
         showHeader ? "transform translate-y-0" : "transform -translate-y-full"
-      } ${pathname.split("/").length > 2 && "py-4"}`}
+      } ${pathname.split("/").length > 2 && "py-4"} ${
+        pathname.split("/")[2] === "sheet" && "hidden"
+      }`}
     >
       <div
         className={`relative hidden dark:flex cursor-pointer ${

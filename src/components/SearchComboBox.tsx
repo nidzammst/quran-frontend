@@ -10,7 +10,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { Toggle } from "./ui/toggle";
 import { useEffect, useState } from "react";
 import { fetchSuratListData } from "@/lib/fetch";
-import { OneSuratResponse, SuratResponse } from "@/lib/quran-model";
+import {
+  GetAyatResponse,
+  OneSuratResponse,
+  SuratResponse,
+} from "@/lib/quran-model";
 import {
   Pagination,
   PaginationContent,
@@ -31,6 +35,7 @@ export function SearchComboBox() {
     pathname.split("/").length > 2 ? "ayat" : "surat"
   );
   const [searchSuratData, setSearchSuratData] = useState<OneSuratResponse[]>();
+  const [searchAyatData, setSearchAyatData] = useState<GetAyatResponse[]>();
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState<number[]>([page - 1, page, page + 1]);
   const [size, setSize] = useState(10);
@@ -50,20 +55,27 @@ export function SearchComboBox() {
         setSearchSuratData(data.data);
       } else if (type === "word") {
         const data = await fetch(
-          `https://quran-api2.vercel.app/api/${translationId}/search?terjemah=${search}&size=${size}&page=${page}`
+          `https://quran-api2.vercel.app/api/${translationId}/surat?terjemah=${search}&size=${size}&page=${page}`
         ).then((res) => res.json());
         setSearchSuratData(data.data);
         if (data.data.length === 0) {
           const data = await fetch(
-            `https://quran-api2.vercel.app/api/ar/search?terjemah=${search}&size=${size}&page=${page}`
+            `https://quran-api2.vercel.app/api/ar/surat?terjemah=${search}&size=${size}&page=${page}`
           ).then((res) => res.json());
           setSearchSuratData(data.data);
         }
+      } else if (type === "ayat") {
+        const data = await fetch(
+          `https://quran-api2.vercel.app/api/${translationId}/surat/ayat/${
+            pathname.split("/")[3]
+          }?query=${search}`
+        ).then((res) => res.json());
+        setSearchAyatData(data.data);
       }
     };
 
     fetchData(page, size);
-  }, [search, translationId, type, page, size]);
+  }, [search, translationId, type, page, size, pathname]);
 
   const boldText = (ayat: string, word: string) => {
     const boldParts = ayat.split(new RegExp(`(${word})`, "i"));
@@ -243,6 +255,31 @@ export function SearchComboBox() {
                 }}
               >
                 <h3 className="font-bold">{surat.name}</h3>
+              </CommandItem>
+            ))}
+
+          {type === "ayat" &&
+            searchAyatData?.map((surat) => (
+              <CommandItem
+                key={surat.number}
+                value={surat.translation_id}
+                className="h-16 cursor-pointer"
+                onSelect={() => {
+                  router.push(
+                    `/${translationId}/surat/${pathname.split("/")[3]}#${
+                      surat.number
+                    }`
+                  );
+                }}
+              >
+                <h3 className="font-bold">{surat.number}</h3>
+                <h3 className="">
+                  {translationId === "id"
+                    ? boldText(surat.translation_id, search)
+                    : translationId === "en"
+                    ? boldText(surat.translation_en, search)
+                    : boldText(surat.text, search)}
+                </h3>
               </CommandItem>
             ))}
         </CommandList>

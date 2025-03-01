@@ -3,6 +3,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "./button";
 import {
   BookmarkCheck,
+  BookOpen,
   House,
   Languages,
   LaptopMinimal,
@@ -10,6 +11,7 @@ import {
   MoonStar,
   SlidersHorizontal,
   SunMoon,
+  Tag,
 } from "lucide-react";
 import {
   Tooltip,
@@ -24,6 +26,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { Separator } from "./separator";
+import Link from "next/link";
 
 const MenuDrawer = () => {
   const pathname = usePathname();
@@ -36,8 +39,14 @@ const MenuDrawer = () => {
     customDrawerOpen,
     setCustomDrawerOpen,
   } = useSingleSuratStore();
-  const { translationId, setTranslationId, theme, setThemeStore, ayatSaved } =
-    useSiteSettingsStore();
+  const {
+    translationId,
+    setTranslationId,
+    theme,
+    setThemeStore,
+    ayatSaved,
+    sheetSaved,
+  } = useSiteSettingsStore();
 
   const changePathname = (lang: "id" | "ar" | "en"): void => {
     setTranslationId(lang);
@@ -98,28 +107,16 @@ const MenuDrawer = () => {
           <div className="flex flex-row gap-3 content-center items-center justify-between mb-6">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger
-                  className={`${
-                    pathname.split("/").length <= 2 && "hidden"
-                  } w-full`}
-                >
-                  <Button
-                    className="w-full"
-                    variant="outline"
-                    onClick={() => router.push(`/${translationId}`)}
-                  >
-                    <House />
-                  </Button>
+                <TooltipTrigger className="w-full">
+                  <Link href={`/${translationId}/sheet/1`}>
+                    <Button className="w-full" variant="outline">
+                      <BookOpen size={48} strokeWidth={3} />
+                    </Button>
+                  </Link>
                 </TooltipTrigger>
-                <TooltipContent>Back to home</TooltipContent>
+                <TooltipContent>Buka versi halaman</TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
-            <Separator
-              orientation="vertical"
-              className={`${pathname.split("/").length <= 2 && "hidden"} h-10`}
-            />
-
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="w-full">
@@ -271,15 +268,12 @@ const MenuDrawer = () => {
           </div>
         </div>
 
-        {ayatSaved.surat !== "" && ayatSaved.ayat !== "" && (
-          <>
-            <Separator
-              orientation="vertical"
-              className={`h-24 max-sm:hidden`}
-            />
-            <div className="w-full">
-              <h3 className="font-bold mb-2">Saved</h3>
-              <div className="flex flex-row gap-2 justify-between">
+        <>
+          <Separator orientation="vertical" className={`h-24 max-sm:hidden`} />
+          <div className="w-full">
+            <h3 className="font-bold mb-2">Others</h3>
+            <div className="flex flex-row gap-2">
+              {ayatSaved.surat !== "" && ayatSaved.ayat !== "" && (
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
@@ -295,13 +289,43 @@ const MenuDrawer = () => {
                         <BookmarkCheck size={48} strokeWidth={3} className="" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Buka ayat terakhir baca</TooltipContent>
+                    <TooltipContent>Buka ayat tersimpan</TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              </div>
+              )}
+              {sheetSaved !== 0 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link href={`/${translationId}/sheet/${sheetSaved}`}>
+                        <Button className="w-full" variant="outline">
+                          <Tag size={48} strokeWidth={3} className="" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>Buka Halaman tersimpan</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger
+                    className={`${pathname.split("/").length <= 2 && "hidden"}`}
+                  >
+                    <Button
+                      variant="outline"
+                      onClick={() => router.push(`/${translationId}`)}
+                    >
+                      <House />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Back to home</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
-          </>
-        )}
+          </div>
+        </>
       </DrawerContent>
     </Drawer>
   );

@@ -32,6 +32,8 @@ interface SiteSettingsStore {
   setThemeStore: (theme: "light" | "dark" | "system") => void;
   ayatSaved: { surat: string; ayat: string };
   saveAyatData: (data: { surat: string; ayat: string }) => void;
+  sheetSaved: number;
+  setSheetSaved: (sheet: number) => void;
 }
 
 const getUrlSearch = () => {
@@ -97,10 +99,15 @@ export const useSiteSettingsStore = create<SiteSettingsStore>()(
       setThemeStore: (theme: "light" | "dark" | "system") => set({ theme }),
       ayatSaved: { surat: "", ayat: "" },
       saveAyatData: (data) => set(() => ({ ayatSaved: data })),
+      sheetSaved: 0,
+      setSheetSaved: (sheet: number) => set({ sheetSaved: sheet }),
     }),
     {
-      name: "ayat-saved-store",
-      partialize: (state) => ({ ayatSaved: state.ayatSaved }),
+      name: "quran-data-store",
+      partialize: (state) => ({
+        ayatSaved: state.ayatSaved,
+        sheetSaved: state.sheetSaved,
+      }),
     }
   )
 );

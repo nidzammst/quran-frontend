@@ -30,7 +30,7 @@ export const fetchSingleSurat = async (
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error("Error fetching surat list:", error);
+    console.error("Error fetching single surat:", error);
     return undefined;
   }
 };
